@@ -26,6 +26,42 @@ router.get('/', (req, res) => {
     res.json(users);
 });
 
+router.get('/:id', (req, res) => {
+    const user = users[req.params.id - 1];
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+});
+
+router.post('/', (req, res) => {
+    const newUser = {
+        name: req.body.name,
+        age: req.body.age
+    };
+    users.push(newUser);
+    res.status(201).json(newUser);
+});
+
+router.put('/:id', (req, res) => {
+    const userIndex = req.params.id - 1;
+    if (!users[userIndex]) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    users[userIndex].name = req.body.name;
+    users[userIndex].age = req.body.age;
+    res.json(users[userIndex]);
+});
+
+router.delete('/:id', (req, res) => {
+    const userIndex = req.params.id - 1;
+    if (!users[userIndex]) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    users.splice(userIndex, 1);
+    res.sendStatus(204);
+});
+
 // Route to get a particular user by index
 router.get('/:id', (req, res) => {
     const user = users[req.params.id - 1];
